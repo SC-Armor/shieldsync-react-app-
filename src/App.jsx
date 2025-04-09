@@ -6,26 +6,28 @@ export default function App() {
   const [responseInitiated, setResponseInitiated] = useState(false);
 
   const disruptionData = {
-    center: [38.2527, -85.7585], // Exact Louisville, KY coordinates
+    center: [38.2527, -85.7585], // Louisville, KY coordinates
     company: "UPS Worldport",
     severity: 4,
-    pnsEstimate: 0.67,
+    pnsEstimate: 0.85,
     impactHours: 36,
     lossEstimate: "$12M"
   };
 
   const rerouteInfo = {
-    action: "Divert to Nashville DC",
+    action: "Divert shipments via Kansas City distribution corridor",
     timeSaved: "< 6 hours",
     cost: "$170K"
   };
+
+  const needleRotation = 135 + 270 * disruptionData.pnsEstimate; // angle for gauge needle
 
   return (
     <div className="min-h-screen bg-[#0b0f1a] text-white p-6 font-sans">
       {/* Header */}
       <div className="text-left mb-6">
-        <h1 className="text-3xl font-bold text-blue-400">
-          AMERICAN <span className="text-white">SHIELD COMMAND</span>
+        <h1 className="text-3xl font-bold text-white">
+          AMERICAN SHIELD COMMAND
         </h1>
         <p className="text-gray-400 text-sm">
           National Infrastructure Risk Defense Dashboard
@@ -35,16 +37,16 @@ export default function App() {
       <div className="grid grid-cols-3 gap-6">
         {/* Left Panel */}
         <div className="col-span-2 space-y-6">
-          <div className="bg-gradient-to-br from-red-900 to-black p-6 rounded-xl shadow">
-            <h2 className="text-red-400 text-xl font-semibold mb-2">Disruption Forecast</h2>
+          <div className="bg-[#1c1f2a] p-6 rounded-xl shadow relative">
+            <h2 className="text-red-400 text-xl font-semibold mb-2">Blizzard Forecast</h2>
             <div className="h-[300px] rounded overflow-hidden relative">
-              <MapContainer center={disruptionData.center} zoom={7} style={{ height: "100%", width: "100%" }}>
+              <MapContainer center={disruptionData.center} zoom={6.5} style={{ height: "100%", width: "100%" }}>
                 <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                   attribution="&copy; OpenStreetMap contributors"
                 />
-                <Circle center={disruptionData.center} radius={120000} pathOptions={{ fillColor: "#ff4500", fillOpacity: 0.4, color: "#ff4500" }}>
-                  <Popup>{disruptionData.company} – Blizzard Alert (3 days)</Popup>
+                <Circle center={disruptionData.center} radius={140000} pathOptions={{ fillColor: "#ff4500", fillOpacity: 0.5, color: "#ff4500" }}>
+                  <Popup>{disruptionData.company} – Blizzard Forecast: 3 Days</Popup>
                 </Circle>
                 <Marker position={disruptionData.center}>
                   <Tooltip direction="top" offset={[0, -20]} opacity={1} permanent>
@@ -53,25 +55,23 @@ export default function App() {
                 </Marker>
               </MapContainer>
             </div>
-            <p className="text-center text-white mt-3 text-lg">Louisville, KY – Blizzard Incoming</p>
+            <p className="absolute bottom-4 left-6 text-white text-lg">Blizzard Forecast – 3 DAYS</p>
           </div>
 
-          <div className="bg-[#121826] p-6 rounded-xl">
-            <h3 className="text-lg font-semibold mb-2">SHIELD RESPONSE SUGGESTED</h3>
-            <p className="text-white bg-blue-800 p-3 rounded">{rerouteInfo.action}</p>
-            {!responseInitiated ? (
-              <button onClick={() => setResponseInitiated(true)} className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-bold">
+          <div className="flex gap-6">
+            <div className="bg-[#121826] p-6 rounded-xl w-1/2">
+              <h3 className="text-sm text-gray-400 font-semibold mb-2">SHIELD RESPONSE SUGGESTED</h3>
+              <p className="text-white text-lg leading-tight mb-3">{rerouteInfo.action}</p>
+              <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-bold text-sm">
                 INITIATE RESPONSE
               </button>
-            ) : (
-              <p className="text-green-400 mt-4">✔ Response Activated</p>
-            )}
+            </div>
 
-            <div className="mt-6 text-sm text-gray-400">
-              <h4 className="text-white font-semibold mb-2">SIMULATED IMPACT</h4>
-              <p>Without Action: <span className="text-white">{disruptionData.impactHours}-hour shortage</span></p>
-              <p>Financial Cost: <span className="text-white">{disruptionData.lossEstimate}</span></p>
-              <p className="text-white mt-1">PNSE: {(disruptionData.pnsEstimate * 100).toFixed(0)}%</p>
+            <div className="bg-[#121826] p-6 rounded-xl w-1/2">
+              <h3 className="text-sm text-gray-400 font-semibold mb-2">SIMULATED IMPACT</h3>
+              <p className="text-white text-sm mb-1">Without Action: {disruptionData.impactHours}-hour regional shortage</p>
+              <p className="text-white text-sm mb-1">Financial Cost: Est. {disruptionData.lossEstimate} in spoiled inventory</p>
+              <p className="text-white text-sm">PNSE: {Math.round(disruptionData.pnsEstimate * 100)}%</p>
             </div>
           </div>
         </div>
@@ -79,35 +79,44 @@ export default function App() {
         {/* Right Panel */}
         <div className="space-y-6">
           <div className="bg-[#121826] p-6 rounded-xl">
-            <h2 className="text-lg font-semibold mb-4">DISRUPTION PULSE</h2>
-            <div className="relative w-full h-36">
-              <svg viewBox="0 0 200 100" className="w-full h-full">
-                <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="#333" strokeWidth="12" />
-                <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="#ff0000" strokeWidth="10" strokeDasharray="282.6" strokeDashoffset={282.6 * (1 - disruptionData.pnsEstimate)} strokeLinecap="round" />
-                <circle cx="100" cy="90" r="6" fill="#ffffff" />
-                <text x="100" y="55" textAnchor="middle" fill="#ffffff" fontSize="14">{Math.round(disruptionData.pnsEstimate * 100)}%</text>
-              </svg>
+            <h2 className="text-sm font-semibold mb-4">DISRUPTION PULSE</h2>
+            <div className="relative w-full h-40 flex justify-center items-end">
+              <div className="relative w-[200px] h-[100px]">
+                <svg viewBox="0 0 200 100" className="w-full h-full">
+                  <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="#2c2f3a" strokeWidth="12" />
+                  <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="url(#gaugeGradient)" strokeWidth="10" />
+                  <defs>
+                    <linearGradient id="gaugeGradient">
+                      <stop offset="0%" stopColor="#00ff00" />
+                      <stop offset="50%" stopColor="#ffff00" />
+                      <stop offset="100%" stopColor="#ff0000" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div
+                  className="absolute w-1 h-[90px] bg-white left-[99px] origin-bottom"
+                  style={{ transform: `rotate(${needleRotation}deg)` }}
+                />
+              </div>
+              <div className="absolute text-white font-bold text-sm bottom-1 left-1">LOW</div>
+              <div className="absolute text-white font-bold text-sm bottom-1 right-1">HIGH</div>
             </div>
           </div>
 
           <div className="bg-[#121826] p-6 rounded-xl">
-            <h2 className="text-lg font-semibold mb-2">INCOMING DISRUPTIONS</h2>
-            <div className="text-sm">
-              <div className="mb-4">
-                <span className="text-gray-400">Without Action:</span>
-                <ul className="list-disc list-inside ml-2">
-                  <li>{disruptionData.impactHours}-hour regional shortage</li>
-                  <li>{disruptionData.lossEstimate} in losses</li>
-                  <li className="text-red-500">Public Risk Level: RED</li>
-                </ul>
+            <h2 className="text-sm font-semibold mb-2">INCOMING DISRUPTIONS</h2>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-gray-400 font-bold mb-1">Without Action</p>
+                <p>Divert shipments via Kansas City</p>
+                <p>Financial Cost: Est. {disruptionData.lossEstimate}</p>
+                <p className="text-red-500">Public Risk Level: RED</p>
               </div>
               <div>
-                <span className="text-gray-400">With Shield Response:</span>
-                <ul className="list-disc list-inside ml-2">
-                  <li>Rerouted in {rerouteInfo.timeSaved}</li>
-                  <li>{rerouteInfo.cost} reroute cost</li>
-                  <li className="text-green-500">Public Risk Level: CONTAINED</li>
-                </ul>
+                <p className="text-gray-400 font-bold mb-1">With Shield Response</p>
+                <p>Rerouted in {rerouteInfo.timeSaved}</p>
+                <p>{rerouteInfo.cost} reroute cost</p>
+                <p className="text-green-500">Public Risk Level: CONTAINED</p>
               </div>
             </div>
           </div>
