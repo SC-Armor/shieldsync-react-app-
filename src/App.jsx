@@ -1,9 +1,10 @@
 import React from "react";
-import GaugeChart from "react-gauge-chart";
 import { MapContainer, TileLayer, Circle, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 export default function App() {
+  const percent = 0.85;
+
   return (
     <div className="min-h-screen bg-[#0b0f1a] text-white p-6 font-sans">
       {/* Header */}
@@ -17,7 +18,7 @@ export default function App() {
       </div>
 
       <div className="grid grid-cols-3 gap-6">
-        {/* Left Panel: Forecast + Map + Response */}
+        {/* Left Panel */}
         <div className="col-span-2 space-y-6">
           <div className="bg-gradient-to-br from-red-900 to-black p-6 rounded-xl shadow">
             <h2 className="text-red-400 text-xl font-semibold mb-2">Disruption Forecast</h2>
@@ -53,19 +54,26 @@ export default function App() {
           </div>
         </div>
 
-        {/* Right Panel: Gauge + Outcomes */}
+        {/* Right Panel */}
         <div className="space-y-6">
           <div className="bg-[#121826] p-6 rounded-xl">
             <h2 className="text-lg font-semibold mb-4">DISRUPTION PULSE</h2>
-            <GaugeChart
-              id="gauge-chart1"
-              nrOfLevels={20}
-              percent={0.85}
-              arcWidth={0.3}
-              colors={["#00FF00", "#FFBF00", "#FF0000"]}
-              textColor="#ffffff"
-              needleColor="#ffffff"
-            />
+            <div className="relative w-full h-36">
+              <svg viewBox="0 0 200 100" className="w-full h-full">
+                <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="#333" strokeWidth="12"/>
+                <path
+                  d="M10,90 A90,90 0 0,1 190,90"
+                  fill="none"
+                  stroke="#ff0000"
+                  strokeWidth="10"
+                  strokeDasharray="282.6"
+                  strokeDashoffset={282.6 * (1 - percent)}
+                  strokeLinecap="round"
+                />
+                <circle cx="100" cy="90" r="6" fill="#ffffff" />
+                <text x="100" y="55" textAnchor="middle" fill="#ffffff" fontSize="14">85%</text>
+              </svg>
+            </div>
           </div>
 
           <div className="bg-[#121826] p-6 rounded-xl">
