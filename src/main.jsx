@@ -58,7 +58,8 @@ function Dashboard() {
               <div>
                 <span className="text-gray-400">With Shield Response:</span>
                 <ul className="list-disc list-inside ml-2">
-                  <li>Shipments rerouted in < 6 hours</li>
+                  <li>Shipments rerouted in &lt; 6 hours</li>
+
                   <li>$170K reroute cost</li>
                   <li className="text-green-400">Public Risk Level: CONTAINED</li>
                 </ul>
