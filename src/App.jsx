@@ -80,24 +80,28 @@ export default function App() {
         <div className="space-y-6">
           <div className="bg-[#121826] p-6 rounded-xl">
             <h2 className="text-sm font-semibold mb-4">DISRUPTION PULSE</h2>
-            <div className="relative w-full h-40 flex justify-center items-end">
-              <div className="relative w-[200px] h-[100px]">
-                <svg viewBox="0 0 200 100" className="w-full h-full">
-                  <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="#2c2f3a" strokeWidth="12" />
-                  <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="url(#gaugeGradient)" strokeWidth="10" />
-                  <defs>
-                    <linearGradient id="gaugeGradient">
-                      <stop offset="0%" stopColor="#00ff00" />
-                      <stop offset="50%" stopColor="#ffff00" />
-                      <stop offset="100%" stopColor="#ff0000" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <div
-                  className="absolute w-1 h-[90px] bg-white left-[99px] origin-bottom"
-                  style={{ transform: `rotate(${needleRotation}deg)` }}
+            <div className="relative w-full h-40 flex justify-center items-center">
+              <svg viewBox="0 0 200 100" className="w-[200px] h-[100px]">
+                <defs>
+                  <linearGradient id="gaugeGradient">
+                    <stop offset="0%" stopColor="#00ff00" />
+                    <stop offset="50%" stopColor="#ffff00" />
+                    <stop offset="100%" stopColor="#ff0000" />
+                  </linearGradient>
+                </defs>
+                <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="#2c2f3a" strokeWidth="12" />
+                <path d="M10,90 A90,90 0 0,1 190,90" fill="none" stroke="url(#gaugeGradient)" strokeWidth="10" />
+                <line
+                  x1="100"
+                  y1="90"
+                  x2={100 + 70 * Math.cos((Math.PI * (needleRotation - 180)) / 180)}
+                  y2={90 + 70 * Math.sin((Math.PI * (needleRotation - 180)) / 180)}
+                  stroke="white"
+                  strokeWidth="4"
+                  strokeLinecap="round"
                 />
-              </div>
+                <circle cx="100" cy="90" r="5" fill="white" />
+              </svg>
               <div className="absolute text-white font-bold text-sm bottom-1 left-1">LOW</div>
               <div className="absolute text-white font-bold text-sm bottom-1 right-1">HIGH</div>
             </div>
