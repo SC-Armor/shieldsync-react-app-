@@ -19,24 +19,27 @@ export default function DisruptionMap() {
     <div className="bg-[#1c1f2a] p-6 rounded-xl shadow-lg relative overflow-hidden">
       <div className="relative h-[300px] w-full rounded overflow-hidden">
 
-        {/* Radiant Pulse Background */}
-        <img
-          src={pulseGlow}
-          alt="pulse-glow"
-          className="absolute top-1/2 left-1/2 w-[240px] h-[240px] transform -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none"
-        />
+        {/* Fixed Overlay Layer - z-30 */}
+        <div className="absolute top-0 left-0 w-full h-full z-30 pointer-events-none">
+          {/* Pulse Glow - z-10 */}
+          <img
+            src={pulseGlow}
+            alt="pulse-glow"
+            className="absolute top-1/2 left-1/2 w-[240px] h-[240px] transform -translate-x-1/2 -translate-y-1/2 z-10"
+          />
 
-        {/* Blizzard Forecast Label */}
-        <div className="absolute top-1/2 left-1/2 z-20 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-          <h2 className="text-white font-bold text-xl leading-tight">Blizzard<br />Forecast</h2>
-          <p className="text-white text-sm mt-1">3 DAYS</p>
+          {/* Blizzard Forecast Text - z-30 */}
+          <div className="absolute top-1/2 left-1/2 z-30 transform -translate-x-1/2 -translate-y-1/2 text-center">
+            <h2 className="text-white font-bold text-xl leading-tight">Blizzard<br />Forecast</h2>
+            <p className="text-white text-sm mt-1">3 DAYS</p>
+          </div>
         </div>
 
-        {/* Map + Marker */}
+        {/* Map and Pin - z-0 */}
         <MapContainer
           center={center}
           zoom={6.2}
-          style={{ height: "100%", width: "100%" }}
+          style={{ height: "100%", width: "100%", zIndex: 0 }}
           zoomControl={false}
           attributionControl={false}
         >
