@@ -12,19 +12,19 @@ export default function DisruptionMap() {
     iconSize: [32, 48],
     iconAnchor: [16, 48],
     popupAnchor: [0, -48],
+    className: "leaflet-custom-icon"
   });
 
   return (
     <div className="bg-[#1c1f2a] p-6 rounded-xl shadow-lg relative overflow-hidden">
       <div className="relative h-[300px] w-full rounded overflow-hidden">
-        {/* Animated Pulse Glow */}
-        <div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] bg-[#ff5c00] opacity-30 rounded-full blur-[90px] transform -translate-x-1/2 -translate-y-1/2 animate-ping z-10"></div>
+
+        {/* Radiant Orange Glow */}
+        <div className="absolute top-1/2 left-1/2 w-[250px] h-[250px] bg-[#ff5c00] rounded-full blur-[120px] opacity-40 animate-pulse transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
 
         {/* Blizzard Forecast Label */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-20">
-          <h2 className="text-white font-bold text-xl leading-tight">
-            Blizzard<br />Forecast
-          </h2>
+        <div className="absolute top-1/2 left-1/2 text-center transform -translate-x-1/2 -translate-y-1/2 z-20">
+          <h2 className="text-white text-xl font-bold leading-tight">Blizzard<br />Forecast</h2>
           <p className="text-white text-sm mt-1">3 DAYS</p>
         </div>
 
@@ -42,16 +42,12 @@ export default function DisruptionMap() {
             position={center}
             icon={customIcon}
             eventHandlers={{
-              mouseover: (e) => {
-                e.target.openPopup();
-              },
-              mouseout: (e) => {
-                e.target.closePopup();
-              },
+              mouseover: (e) => e.target.openPopup(),
+              mouseout: (e) => e.target.closePopup()
             }}
           >
-            <Popup>
-              <div className="text-sm font-semibold text-black">
+            <Popup closeButton={false} autoPan={false}>
+              <div className="text-sm font-semibold text-black leading-snug">
                 UPS Worldport<br />
                 911 Grade Lane<br />
                 Louisville, KY 40213
