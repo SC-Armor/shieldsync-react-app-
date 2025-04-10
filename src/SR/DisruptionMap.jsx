@@ -18,10 +18,10 @@ export default function DisruptionMap() {
     <div className="bg-[#1c1f2a] p-6 rounded-xl shadow-lg relative overflow-hidden">
       <div className="relative h-[300px] w-full rounded overflow-hidden">
         {/* Animated Pulse Glow */}
-        <div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] bg-[#ff5c00] opacity-30 rounded-full blur-[90px] transform -translate-x-1/2 -translate-y-1/2 animate-ping z-10 pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] bg-[#ff5c00] opacity-30 rounded-full blur-[90px] transform -translate-x-1/2 -translate-y-1/2 animate-ping z-10"></div>
 
         {/* Blizzard Forecast Label */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-20 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-20">
           <h2 className="text-white font-bold text-xl leading-tight">
             Blizzard<br />Forecast
           </h2>
@@ -38,7 +38,18 @@ export default function DisruptionMap() {
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           />
-          <Marker position={center} icon={customIcon}>
+          <Marker
+            position={center}
+            icon={customIcon}
+            eventHandlers={{
+              mouseover: (e) => {
+                e.target.openPopup();
+              },
+              mouseout: (e) => {
+                e.target.closePopup();
+              },
+            }}
+          >
             <Popup>
               <div className="text-sm font-semibold text-black">
                 UPS Worldport<br />
