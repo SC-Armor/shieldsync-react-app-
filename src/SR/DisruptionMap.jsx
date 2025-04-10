@@ -3,31 +3,36 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import customPin from "../assets/pin-icon.svg";
+import pulseGlow from "../assets/orange-pulse-glow.svg";
 
 export default function DisruptionMap() {
-  const center = [38.2527, -85.7585]; // Louisville, KY
+  const center = [38.2527, -85.7585]; // UPS Worldport, Louisville KY
 
   const customIcon = L.icon({
     iconUrl: customPin,
     iconSize: [32, 48],
     iconAnchor: [16, 48],
-    popupAnchor: [0, -48],
-    className: "leaflet-custom-icon"
+    popupAnchor: [0, -48]
   });
 
   return (
     <div className="bg-[#1c1f2a] p-6 rounded-xl shadow-lg relative overflow-hidden">
       <div className="relative h-[300px] w-full rounded overflow-hidden">
 
-        {/* Radiant Orange Glow */}
-        <div className="absolute top-1/2 left-1/2 w-[250px] h-[250px] bg-[#ff5c00] rounded-full blur-[120px] opacity-40 animate-pulse transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
+        {/* Radiant Pulse Background */}
+        <img
+          src={pulseGlow}
+          alt="pulse-glow"
+          className="absolute top-1/2 left-1/2 w-[240px] h-[240px] transform -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none"
+        />
 
         {/* Blizzard Forecast Label */}
-        <div className="absolute top-1/2 left-1/2 text-center transform -translate-x-1/2 -translate-y-1/2 z-20">
-          <h2 className="text-white text-xl font-bold leading-tight">Blizzard<br />Forecast</h2>
+        <div className="absolute top-1/2 left-1/2 z-20 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+          <h2 className="text-white font-bold text-xl leading-tight">Blizzard<br />Forecast</h2>
           <p className="text-white text-sm mt-1">3 DAYS</p>
         </div>
 
+        {/* Map + Marker */}
         <MapContainer
           center={center}
           zoom={6.2}
