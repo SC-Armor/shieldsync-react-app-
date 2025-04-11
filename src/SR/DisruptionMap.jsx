@@ -1,53 +1,76 @@
-return (
-  <MapContainer
-    center={center}
-    zoom={zoomLevel}
-    minZoom={4}
-    maxZoom={12}
-    style={{ height: "600px", width: "100%", borderRadius: "12px" }}
-    whenCreated={(mapInstance) => {
-      mapRef.current = mapInstance;
-    }}
-  >
-    <TileLayer
-      url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-      attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-    />
+import React from "react";
+import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
-    {/* PULSE GLOW */}
-    <Marker
-      position={center}
-      icon={L.icon({
-        iconUrl: pulseGlow,
-        iconSize: [zoomLevel * 10, zoomLevel * 10],
-        iconAnchor: [zoomLevel * 5, zoomLevel * 5],
-      })}
-      interactive={false}
-    />
+import pinIcon from "./assets/pin-icon.svg";
+import pulseGlow from "./assets/orange-pulse-glow.svg";
 
-    {/* FORECAST TEXT LABEL */}
-    <Marker
-      position={center}
-      icon={L.divIcon({
-        className: "forecast-label",
-        html: `<div style="color: white; font-weight: bold; text-shadow: 1px 1px 2px black; font-size: ${
-          zoomLevel >= 8 ? "18px" : zoomLevel >= 6 ? "16px" : "14px"
-        };">Blizzard Forecast<br/>3 Days</div>`,
-        iconAnchor: [20, 80],
-      })}
-      interactive={false}
-    />
+const mapCenter = [37.7749, -122.4194]; // San Francisco placeholder
+const zoomLevel = 10;
 
-    {/* PIN MARKER */}
-    <Marker
-      ref={markerRef}
-      position={center}
-      icon={customIcon(zoomLevel)}
-      eventHandlers={{
-        click: handlePinClick,
-      }}
-    />
+// Animated Pulse + Pin + Forecast Label
+const CustomMarker = () => {
+  return (
+    <div className="relative w-full h-full">
+      <img
+        src={pulseGlow}
+        alt="Pulse Glow"
+        className="absolute w-[64px] h-[64px] animate-ping opacity-70"
+        style={{
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 10
+        }}
+      />
+      <img
+        src={pinIcon}
+        alt="Disruption Pin"
+        className="absolute w-[32px] h-[32px]"
+        style={{
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 20
+        }}
+      />
+      <div
+        className="absolute text-white font-bold text-sm"
+        style={{
+          top: "calc(50% - 48px)",
+          left: "50%",
+          transform: "translateX(-50%) scale(1.2)",
+          zIndex: 30
+        }}
+      >
+        Blizzard Warning
+      </div>
+    </div>
+  );
+};
 
-    <DynamicEvents />
-  </MapContainer>
-);
+export default function DisruptionMap() {
+  const customIcon = new L.Icon({ iconUrl: pinIcon, iconSize: [0, 0] }); // Hides default Leaflet marker
+
+  return (
+    <div className="rounded-xl overflow-hidden">
+      <MapContainer
+        center={mapCenter}
+        zoom={zoomLevel}
+        style={{ height: "500px", width: "100%" }}
+        zoomControl={false}
+      >
+        <TileLayer
+          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          attribution=""
+        />
+        <Marker position={mapCenter} icon={customIcon}>
+          <Popup>Disruption Event</Popup>
+        </Marker>
+        <CustomMarker />
+      </MapContainer>
+    </div>
+  );
+}
+
