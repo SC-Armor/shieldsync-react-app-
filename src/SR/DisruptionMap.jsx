@@ -68,4 +68,18 @@ export default function DisruptionMap() {
         zoomControl={false}
       >
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z_
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          attribution=""
+        />
+        <Marker
+          position={mapCenter}
+          icon={customIcon}
+          eventHandlers={{
+            click: (e) => e.target._map.flyTo(e.latlng, 9, { duration: 1.2 }),
+          }}
+        />
+        <CustomOverlay position={mapCenter} />
+      </MapContainer>
+    </div>
+  );
+}
