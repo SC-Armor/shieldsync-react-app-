@@ -1,93 +1,96 @@
-```jsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
   Marker,
-  Popup,
-  useMapEvents,
-  Pane
+  useMapEvents
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import customPin from "../assets/pin-icon.svg";
+import pulseGlow from "../assets/orange-pulse-glow.svg";
 
-const center = [38.2527, -85.7585]; // Louisville, KY
-
-export default function DisruptionMap() {
+const DisruptionMap = () => {
+  const center = [38.2527, -85.7585]; // Louisville
   const [zoomLevel, setZoomLevel] = useState(6);
-  const mapRef = useRef();
+  const [showForecast, setShowForecast] = useState(true);
   const markerRef = useRef();
+  const mapRef = useRef();
 
-  const pulseSize = zoomLevel >= 8 ? 120 : zoomLevel >= 7 ? 160 : 200;
-
-  const customIcon = L.icon({
-    iconUrl: customPin,
-    iconSize: zoomLevel >= 8 ? [30, 42] : zoomLevel >= 6 ? [38, 54] : [46, 66],
-    iconAnchor: [23, 66],
-    popupAnchor: [0, -70]
-  });
-
-  const handleClick = () => {
-    const map = mapRef.current;
-    if (map) {
-      map.flyTo(center, 7, { animate: true });
-    }
-  };
+  const customIcon = (zoom) =>
+    L.icon({
+      iconUrl: customPin,
+      iconSize: zoom >= 8 ? [28, 42] : zoom >= 6 ? [34, 51] : [42, 60],
+      iconAnchor: [21, 60],
+      popupAnchor: [0, -60]
+    });
 
   const DynamicEvents = () => {
     useMapEvents({
       zoomend: () => {
         const zoom = mapRef.current.getZoom();
         setZoomLevel(zoom);
+        if (markerRef.current) {
+          markerRef.current.setIcon(customIcon(zoom));
+        }
       }
     });
     return null;
   };
 
+  const handlePinClick = () => {
+    setShowForecast(false);
+    // We'll trigger disruption logic and zoom later
+  };
+
   return (
-    <div className="relative w-full h-[400px] rounded-xl overflow-hidden bg-gradient-to-br from-[#1a1d26] to-[#10131c] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_15px_rgba(0,0,0,0.3)]">
-      <MapContainer
-        center={center}
-        zoom={6}
-        whenCreated={(mapInstance) => (mapRef.current = mapInstance)}
-        style={{ height: "100%", width: "100%", zIndex: 0 }}
-        zoomControl={false}
-        attributionControl={false}
+    <MapContainer
+      center={center}
+      zoom={zoomLevel}
+      minZoom={5}
+      style={{ height: "500px", width: "100%" }}
+      whenCreated={(mapInstance) => (mapRef.current = mapInstance)}
+      zoomControl={false}
+    >
+      <TileLayer
+        url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
+      />
+
+      <DynamicEvents />
+
+      {/* PULSE SVG FIXED TO LOCATION */}
+      <div
+        className="leaflet-marker-pane"
+        style={{
+          position: "absolute",
+          transform: `translate(-50%, -50%)`
+        }}
       >
-        <DynamicEvents />
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        <img
+          src={pulseGlow}
+          alt="pulse"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: zoomLevel >= 8 ? 80 : zoomLevel >= 6 ? 100 : 120,
+            transform: "translate(-50%, -50%)",
+            pointerEvents: "none",
+            zIndex: 200
+          }}
         />
+      </div>
 
-        {/* PULSE - Locked to center */}
-        <Pane name="pulse-pane" style={{ zIndex: 300 }}>
-          <Marker
-            position={center}
-            icon={L.divIcon({
-              className: "",
-              html: `<div class="pulse-glow" style="width:${pulseSize}px;height:${pulseSize}px"></div>`,
-              iconSize: [pulseSize, pulseSize],
-              iconAnchor: [pulseSize / 2, pulseSize / 2]
-            })}
-          />
-        </Pane>
-
-        {/* MARKER */}
-        <Marker
-          ref={markerRef}
-          position={center}
-          icon={customIcon}
-          eventHandlers={{ click: handleClick }}
-        >
-          <Popup closeButton={false}>
-            <div className="text-white font-medium">
-              <div className="text-lg font-bold">UPS Worldport</div>
-              <div>911 Grade Lane, Louisville, KY</div>
-            </div>
-          </Popup>
-        </Marker>
-      </MapContainer>
-    </div>
+      {/* MARKER PIN */}
+      <Marker
+        position={center}
+        icon={customIcon(zoomLevel)}
+        eventHandlers={{ click: handlePinClick }}
+        ref={markerRef}
+      />
+    </MapContainer>
   );
-}
+};
+
+export default DisruptionMap;
