@@ -33,10 +33,14 @@ const DisruptionMap = () => {
       popupAnchor: [0, -60]
     });
 
-  const textSize =
-    zoomLevel >= 8 ? "text-lg" : zoomLevel >= 6 ? "text-md" : "text-sm";
-  const textOffset =
-    zoomLevel >= 8 ? "top-[22%]" : zoomLevel >= 6 ? "top-[24%]" : "top-[26%]";
+  const labelIcon = (zoom) =>
+    L.divIcon({
+      className: "forecast-label",
+      html: `<div style="color: white; font-weight: bold; font-size: ${
+        zoom >= 8 ? "18px" : zoom >= 6 ? "16px" : "14px"
+      }; background: transparent;">Blizzard Forecast – 3 Days</div>`,
+      iconAnchor: [0, 85] // Offset label 10-15px above pin
+    });
 
   const handlePinClick = () => {
     mapRef.current.setView(center, 8, { animate: true });
@@ -54,10 +58,13 @@ const DisruptionMap = () => {
       >
         <DynamicEvents />
 
-        {/* Blue-Slate Map Theme */}
-        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+        {/* ✅ Final Blue-Slate Map Theme */}
+        <TileLayer
+          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
+        />
 
-        {/* Glowing Pulse (Anchored) */}
+        {/* ✅ Glowing Pulse Locked */}
         <Marker
           position={center}
           icon={L.divIcon({
@@ -68,20 +75,16 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Custom Pin (No Hover/Popup) */}
+        {/* ✅ Forecast Label Above Pin */}
+        <Marker position={center} icon={labelIcon(zoomLevel)} />
+
+        {/* ✅ Pin Marker Only */}
         <Marker
           position={center}
           icon={customIcon(zoomLevel)}
           eventHandlers={{ click: handlePinClick }}
         />
       </MapContainer>
-
-      {/* Blizzard Forecast Text (Fixed, White, Zoom-Responsive) */}
-      <div
-        className={`absolute ${textOffset} left-[50%] transform -translate-x-1/2 text-white font-bold tracking-wide z-[400] pointer-events-none ${textSize}`}
-      >
-        Blizzard Forecast – 3 Days
-      </div>
     </div>
   );
 };
