@@ -3,16 +3,23 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-// Correct paths for Vercel build
 import pinIcon from "../assets/pin-icon.svg";
 import pulseGlow from "../assets/orange-pulse-glow.svg";
 
-const mapCenter = [37.7749, -122.4194]; // San Francisco placeholder
+const mapCenter = [37.7749, -122.4194]; // San Francisco (placeholder)
 const zoomLevel = 10;
 
 const CustomMarker = () => {
   return (
     <div className="relative w-full h-full">
+      {/* Debug Box — Remove once confirmed working */}
+      <div
+        className="absolute bg-red-600 text-white px-2 py-1 rounded shadow"
+        style={{ top: "50%", left: "50%", transform: "translate(-50%, -100%)", zIndex: 99 }}
+      >
+        DEBUG BOX
+      </div>
+
       <img
         src={pulseGlow}
         alt="Pulse Glow"
@@ -51,7 +58,7 @@ const CustomMarker = () => {
 };
 
 export default function DisruptionMap() {
-  const customIcon = new L.Icon({ iconUrl: pinIcon, iconSize: [0, 0] });
+  const customIcon = new L.Icon({ iconUrl: pinIcon, iconSize: [0, 0] }); // Hides default Leaflet pin
 
   return (
     <div className="rounded-xl overflow-hidden">
@@ -62,7 +69,7 @@ export default function DisruptionMap() {
         zoomControl={false}
       >
         <TileLayer
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           attribution=""
         />
         <Marker position={mapCenter} icon={customIcon}>
