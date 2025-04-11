@@ -56,10 +56,13 @@ const DisruptionMap = () => {
       >
         <DynamicEvents />
 
-        {/* GOOD PHOTO Blue-Slate Map */}
-        <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
+        {/* Blue-toned map tile closest to GOOD PHOTO */}
+        <TileLayer
+          url="https://{s}.tile.jawg.io/jawg-dark/{z}/{x}/{y}.png?access-token=YOUR_ACCESS_TOKEN"
+          attribution="&copy; <a href='https://www.jawg.io' target='_blank'>Jawg Maps</a>"
+        />
 
-        {/* Glowing Pulse (Locked + Scales) */}
+        {/* Pulse Glow (locked and scaling) */}
         <Marker
           position={center}
           icon={L.divIcon({
@@ -70,18 +73,22 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Forecast Label (tight above pin) */}
+        {/* Forecast Label (properly placed and above pin) */}
         <Marker
           position={center}
           icon={L.divIcon({
             className: "",
-            html: `<div style='transform: translateY(-60px); text-align: center;' class='text-white font-bold text-[14px] sm:text-[16px] md:text-[18px] tracking-wide'>Blizzard Forecast – 3 Days</div>`,
+            html: `
+              <div style="transform: translateY(-80px); z-index: 1000;" 
+              class="text-white font-bold text-[16px] sm:text-[18px] md:text-[20px] tracking-wide text-center">
+                Blizzard Forecast – 3 Days
+              </div>`,
             iconSize: [200, 40],
             iconAnchor: [100, 0],
           })}
         />
 
-        {/* Custom Pin (Scales + Click Zoom) */}
+        {/* Pin with dynamic scaling + zoom */}
         <Marker
           position={center}
           icon={customIcon(zoomLevel)}
