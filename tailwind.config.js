@@ -1,20 +1,22 @@
-.pulse-glow {
-  background: radial-gradient(circle, rgba(255,87,34,0.9) 0%, rgba(255,87,34,0.5) 40%, rgba(255,87,34,0) 70%);
-  border-radius: 50%;
-  animation: pulse 2s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.9);
-    opacity: 0.85;
-  }
-  70% {
-    transform: scale(1.05);
-    opacity: 0.1;
-  }
-  100% {
-    transform: scale(0.9);
-    opacity: 0.85;
-  }
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}"
+  ],
+  theme: {
+    extend: {
+      animation: {
+        pulseGlow: "pulseGlow 2s ease-in-out infinite"
+      },
+      keyframes: {
+        pulseGlow: {
+          "0%": { opacity: "0.7", transform: "scale(1)" },
+          "50%": { opacity: "0.3", transform: "scale(1.15)" },
+          "100%": { opacity: "0.7", transform: "scale(1)" }
+        }
+      }
+    }
+  },
+  plugins: []
 }
