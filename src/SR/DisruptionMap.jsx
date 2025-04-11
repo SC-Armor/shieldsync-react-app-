@@ -14,6 +14,7 @@ import pulseGlow from "../assets/orange-pulse-glow.svg";
 const DisruptionMap = () => {
   const center = [38.2527, -85.7585];
   const [zoomLevel, setZoomLevel] = useState(6);
+  const markerRef = useRef();
   const mapRef = useRef();
 
   const DynamicEvents = () => {
@@ -21,6 +22,9 @@ const DisruptionMap = () => {
       zoomend: () => {
         const zoom = mapRef.current.getZoom();
         setZoomLevel(zoom);
+        if (markerRef.current) {
+          markerRef.current.setIcon(customIcon(zoom));
+        }
       },
     });
     return null;
@@ -44,7 +48,7 @@ const DisruptionMap = () => {
     <div className="relative w-full h-[560px] rounded-xl overflow-hidden bg-gradient-to-br from-[#1a1d26] to-[#10131c] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_15px_rgba(0,0,0,0.3)]">
       <MapContainer
         center={center}
-        zoom={6}
+        zoom={zoomLevel}
         zoomControl={false}
         attributionControl={false}
         style={{ height: "100%", width: "100%" }}
@@ -53,9 +57,9 @@ const DisruptionMap = () => {
         <DynamicEvents />
 
         {/* GOOD PHOTO Blue-Slate Map */}
-        <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+        <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
 
-        {/* Pulse Glow (Orange, Locked) */}
+        {/* Glowing Pulse (Locked + Scales) */}
         <Marker
           position={center}
           icon={L.divIcon({
@@ -66,22 +70,23 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Forecast Label as divIcon (Zoom-Locked) */}
+        {/* Forecast Label (tight above pin) */}
         <Marker
           position={center}
           icon={L.divIcon({
             className: "",
-            html: `<div class='text-white font-bold text-[16px] sm:text-[18px] md:text-[20px] tracking-wide'>Blizzard Forecast – 3 Days</div>`,
+            html: `<div style='transform: translateY(-60px); text-align: center;' class='text-white font-bold text-[14px] sm:text-[16px] md:text-[18px] tracking-wide'>Blizzard Forecast – 3 Days</div>`,
             iconSize: [200, 40],
-            iconAnchor: [100, 50],
+            iconAnchor: [100, 0],
           })}
         />
 
-        {/* Custom Clickable Pin */}
+        {/* Custom Pin (Scales + Click Zoom) */}
         <Marker
           position={center}
           icon={customIcon(zoomLevel)}
           eventHandlers={{ click: handlePinClick }}
+          ref={markerRef}
         >
           <Popup>
             <div className="text-sm text-white">
