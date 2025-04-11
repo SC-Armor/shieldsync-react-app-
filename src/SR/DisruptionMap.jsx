@@ -33,7 +33,10 @@ const DisruptionMap = () => {
       popupAnchor: [0, -60]
     });
 
-  const textSize = zoomLevel >= 8 ? "text-lg" : zoomLevel >= 6 ? "text-md" : "text-sm";
+  const textSize =
+    zoomLevel >= 8 ? "text-lg" : zoomLevel >= 6 ? "text-md" : "text-sm";
+  const textOffset =
+    zoomLevel >= 8 ? "top-[22%]" : zoomLevel >= 6 ? "top-[24%]" : "top-[26%]";
 
   const handlePinClick = () => {
     mapRef.current.setView(center, 8, { animate: true });
@@ -52,9 +55,9 @@ const DisruptionMap = () => {
         <DynamicEvents />
 
         {/* Blue-Slate Map Theme */}
-        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png" />
+        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
 
-        {/* Glowing Pulse */}
+        {/* Glowing Pulse (Anchored) */}
         <Marker
           position={center}
           icon={L.divIcon({
@@ -65,7 +68,7 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Custom Pin */}
+        {/* Custom Pin (No Hover/Popup) */}
         <Marker
           position={center}
           icon={customIcon(zoomLevel)}
@@ -73,9 +76,9 @@ const DisruptionMap = () => {
         />
       </MapContainer>
 
-      {/* Forecast Text - Locked, Resized, Above Pin */}
+      {/* Blizzard Forecast Text (Fixed, White, Zoom-Responsive) */}
       <div
-        className={`absolute top-[25%] left-[50%] transform -translate-x-1/2 text-white font-bold tracking-wide z-[400] pointer-events-none ${textSize}`}
+        className={`absolute ${textOffset} left-[50%] transform -translate-x-1/2 text-white font-bold tracking-wide z-[400] pointer-events-none ${textSize}`}
       >
         Blizzard Forecast – 3 Days
       </div>
