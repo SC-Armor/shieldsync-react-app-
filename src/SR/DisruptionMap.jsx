@@ -3,7 +3,6 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  Popup,
   useMapEvents
 } from "react-leaflet";
 import L from "leaflet";
@@ -13,10 +12,7 @@ import pulseGlow from "../assets/orange-pulse-glow.svg";
 
 const DisruptionMap = () => {
   const center = [38.2527, -85.7585];
-  const [showForecast, setShowForecast] = useState(true);
-  const [disruption, setDisruption] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(6);
-  const markerRef = useRef();
   const mapRef = useRef();
 
   const DynamicEvents = () => {
@@ -24,9 +20,6 @@ const DisruptionMap = () => {
       zoomend: () => {
         const zoom = mapRef.current.getZoom();
         setZoomLevel(zoom);
-        if (markerRef.current) {
-          markerRef.current.setIcon(customIcon(zoom));
-        }
       }
     });
     return null;
@@ -40,14 +33,9 @@ const DisruptionMap = () => {
       popupAnchor: [0, -60]
     });
 
+  const textSize = zoomLevel >= 8 ? "text-lg" : zoomLevel >= 6 ? "text-md" : "text-sm";
+
   const handlePinClick = () => {
-    setShowForecast(false);
-    setDisruption({
-      title: "Blizzard Warning",
-      impact: "Est. $12M spoiled inventory",
-      riskLevel: "HIGH",
-      probability: "85%"
-    });
     mapRef.current.setView(center, 8, { animate: true });
   };
 
@@ -62,7 +50,9 @@ const DisruptionMap = () => {
         whenCreated={(map) => (mapRef.current = map)}
       >
         <DynamicEvents />
-        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+
+        {/* Blue-Slate Map Theme */}
+        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png" />
 
         {/* Glowing Pulse */}
         <Marker
@@ -75,28 +65,20 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Custom Pin Marker */}
+        {/* Custom Pin */}
         <Marker
-          ref={markerRef}
           position={center}
           icon={customIcon(zoomLevel)}
           eventHandlers={{ click: handlePinClick }}
-        >
-          <Popup closeButton={false}>
-            <div className="text-white font-medium">
-              <div className="text-lg font-bold">UPS Worldport</div>
-              <div>911 Grade Ln, Louisville, KY</div>
-            </div>
-          </Popup>
-        </Marker>
+        />
       </MapContainer>
 
-      {/* Forecast Text Offset */}
-      {showForecast && (
-        <div className="absolute top-[25%] left-[50%] transform -translate-x-1/2 text-orange-400 text-lg font-bold tracking-wide z-[400] pointer-events-none">
-          Blizzard Forecast – 3 Days
-        </div>
-      )}
+      {/* Forecast Text - Locked, Resized, Above Pin */}
+      <div
+        className={`absolute top-[25%] left-[50%] transform -translate-x-1/2 text-white font-bold tracking-wide z-[400] pointer-events-none ${textSize}`}
+      >
+        Blizzard Forecast – 3 Days
+      </div>
     </div>
   );
 };
