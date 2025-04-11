@@ -1,92 +1,53 @@
-import React, { useState, useRef } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  useMapEvents
-} from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import customPin from "../assets/pin-icon.svg";
-import pulseGlow from "../assets/orange-pulse-glow.svg";
+return (
+  <MapContainer
+    center={center}
+    zoom={zoomLevel}
+    minZoom={4}
+    maxZoom={12}
+    style={{ height: "600px", width: "100%", borderRadius: "12px" }}
+    whenCreated={(mapInstance) => {
+      mapRef.current = mapInstance;
+    }}
+  >
+    <TileLayer
+      url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+      attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+    />
 
-const DisruptionMap = () => {
-  const center = [38.2527, -85.7585];
-  const [zoomLevel, setZoomLevel] = useState(6);
-  const mapRef = useRef();
+    {/* PULSE GLOW */}
+    <Marker
+      position={center}
+      icon={L.icon({
+        iconUrl: pulseGlow,
+        iconSize: [zoomLevel * 10, zoomLevel * 10],
+        iconAnchor: [zoomLevel * 5, zoomLevel * 5],
+      })}
+      interactive={false}
+    />
 
-  const DynamicEvents = () => {
-    useMapEvents({
-      zoomend: () => {
-        const zoom = mapRef.current.getZoom();
-        setZoomLevel(zoom);
-      }
-    });
-    return null;
-  };
+    {/* FORECAST TEXT LABEL */}
+    <Marker
+      position={center}
+      icon={L.divIcon({
+        className: "forecast-label",
+        html: `<div style="color: white; font-weight: bold; text-shadow: 1px 1px 2px black; font-size: ${
+          zoomLevel >= 8 ? "18px" : zoomLevel >= 6 ? "16px" : "14px"
+        };">Blizzard Forecast<br/>3 Days</div>`,
+        iconAnchor: [20, 80],
+      })}
+      interactive={false}
+    />
 
-  const customIcon = (zoom) =>
-    L.icon({
-      iconUrl: customPin,
-      iconSize: zoom >= 8 ? [28, 42] : zoom >= 6 ? [34, 51] : [42, 60],
-      iconAnchor: [21, 60],
-      popupAnchor: [0, -60]
-    });
+    {/* PIN MARKER */}
+    <Marker
+      ref={markerRef}
+      position={center}
+      icon={customIcon(zoomLevel)}
+      eventHandlers={{
+        click: handlePinClick,
+      }}
+    />
 
-  const labelIcon = (zoom) =>
-    L.divIcon({
-      className: "forecast-label",
-      html: `<div style="color: white; font-weight: bold; font-size: ${
-        zoom >= 8 ? "18px" : zoom >= 6 ? "16px" : "14px"
-      }; background: transparent;">Blizzard Forecast – 3 Days</div>`,
-      iconAnchor: [0, 85] // Offset label 10-15px above pin
-    });
-
-  const handlePinClick = () => {
-    mapRef.current.setView(center, 8, { animate: true });
-  };
-
-  return (
-    <div className="relative w-full h-[560px] rounded-xl overflow-hidden bg-gradient-to-br from-[#1a1d26] to-[#10131c] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_15px_rgba(0,0,0,0.3)]">
-      <MapContainer
-        center={center}
-        zoom={6}
-        zoomControl={false}
-        attributionControl={false}
-        style={{ height: "100%", width: "100%" }}
-        whenCreated={(map) => (mapRef.current = map)}
-      >
-        <DynamicEvents />
-
-        {/* ✅ Final Blue-Slate Map Theme */}
-        <TileLayer
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
-        />
-
-        {/* ✅ Glowing Pulse Locked */}
-        <Marker
-          position={center}
-          icon={L.divIcon({
-            className: "",
-            html: `<img src="${pulseGlow}" style="width:200px;height:200px;" />`,
-            iconSize: [200, 200],
-            iconAnchor: [100, 100]
-          })}
-        />
-
-        {/* ✅ Forecast Label Above Pin */}
-        <Marker position={center} icon={labelIcon(zoomLevel)} />
-
-        {/* ✅ Pin Marker Only */}
-        <Marker
-          position={center}
-          icon={customIcon(zoomLevel)}
-          eventHandlers={{ click: handlePinClick }}
-        />
-      </MapContainer>
-    </div>
-  );
-};
-
-export default DisruptionMap;
+    <DynamicEvents />
+  </MapContainer>
+);
