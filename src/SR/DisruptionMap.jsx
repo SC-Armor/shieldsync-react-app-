@@ -1,12 +1,10 @@
-```jsx
 import React, { useRef, useState } from "react";
 import {
   MapContainer,
   TileLayer,
   Marker,
   Popup,
-  useMapEvents,
-  Pane
+  useMapEvents
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -85,21 +83,19 @@ export default function DisruptionMap() {
 
           return (
             <React.Fragment key={d.id}>
-              {/* Pulse */}
-              <Pane name={`pulse-${d.id}`} style={{ zIndex: 300 }}>
-                <Marker
-                  position={d.location}
-                  icon={L.divIcon({
-                    className: "",
-                    html: `<div class="pulse-glow" style="background: radial-gradient(circle, ${d.color}e6 0%, ${d.color}88 40%, ${d.color}00 70%); width:${getPulseSize(zoomLevel)}px;height:${getPulseSize(zoomLevel)}px;"></div>`,
-                    iconSize: [getPulseSize(zoomLevel), getPulseSize(zoomLevel)],
-                    iconAnchor: [
-                      getPulseSize(zoomLevel) / 2,
-                      getPulseSize(zoomLevel) / 2
-                    ]
-                  })}
-                />
-              </Pane>
+              {/* Pulse Glow - Locked */}
+              <Marker
+                position={d.location}
+                icon={L.divIcon({
+                  className: "",
+                  html: `<div class="pulse-glow" style="background: radial-gradient(circle, ${d.color}e6 0%, ${d.color}88 40%, ${d.color}00 70%); width:${getPulseSize(zoomLevel)}px;height:${getPulseSize(zoomLevel)}px;"></div>`,
+                  iconSize: [getPulseSize(zoomLevel), getPulseSize(zoomLevel)],
+                  iconAnchor: [
+                    getPulseSize(zoomLevel) / 2,
+                    getPulseSize(zoomLevel) / 2
+                  ]
+                })}
+              />
 
               {/* Marker */}
               <Marker
