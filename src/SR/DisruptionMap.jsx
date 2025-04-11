@@ -1,18 +1,15 @@
 import React from "react";
-import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+// Correct paths for Vercel build
 import pinIcon from "../assets/pin-icon.svg";
 import pulseGlow from "../assets/orange-pulse-glow.svg";
-
-import pinIcon from "./assets/pin-icon.svg";
-import pulseGlow from "./assets/orange-pulse-glow.svg";
 
 const mapCenter = [37.7749, -122.4194]; // San Francisco placeholder
 const zoomLevel = 10;
 
-// Animated Pulse + Pin + Forecast Label
 const CustomMarker = () => {
   return (
     <div className="relative w-full h-full">
@@ -24,7 +21,7 @@ const CustomMarker = () => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          zIndex: 10
+          zIndex: 10,
         }}
       />
       <img
@@ -35,7 +32,7 @@ const CustomMarker = () => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          zIndex: 20
+          zIndex: 20,
         }}
       />
       <div
@@ -44,7 +41,7 @@ const CustomMarker = () => {
           top: "calc(50% - 48px)",
           left: "50%",
           transform: "translateX(-50%) scale(1.2)",
-          zIndex: 30
+          zIndex: 30,
         }}
       >
         Blizzard Warning
@@ -54,7 +51,7 @@ const CustomMarker = () => {
 };
 
 export default function DisruptionMap() {
-  const customIcon = new L.Icon({ iconUrl: pinIcon, iconSize: [0, 0] }); // Hides default Leaflet marker
+  const customIcon = new L.Icon({ iconUrl: pinIcon, iconSize: [0, 0] });
 
   return (
     <div className="rounded-xl overflow-hidden">
@@ -76,4 +73,3 @@ export default function DisruptionMap() {
     </div>
   );
 }
-
