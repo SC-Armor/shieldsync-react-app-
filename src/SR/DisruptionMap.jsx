@@ -3,6 +3,9 @@ import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+import pinIcon from "../assets/pin-icon.svg";
+import pulseGlow from "../assets/orange-pulse-glow.svg";
+
 import pinIcon from "./assets/pin-icon.svg";
 import pulseGlow from "./assets/orange-pulse-glow.svg";
 
