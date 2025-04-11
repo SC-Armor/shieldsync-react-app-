@@ -3,7 +3,8 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  useMapEvents
+  useMapEvents,
+  Popup,
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -11,85 +12,88 @@ import customPin from "../assets/pin-icon.svg";
 import pulseGlow from "../assets/orange-pulse-glow.svg";
 
 const DisruptionMap = () => {
-  const center = [38.2527, -85.7585]; // Louisville
+  const center = [38.2527, -85.7585];
   const [zoomLevel, setZoomLevel] = useState(6);
-  const [showForecast, setShowForecast] = useState(true);
-  const markerRef = useRef();
   const mapRef = useRef();
-
-  const customIcon = (zoom) =>
-    L.icon({
-      iconUrl: customPin,
-      iconSize: zoom >= 8 ? [28, 42] : zoom >= 6 ? [34, 51] : [42, 60],
-      iconAnchor: [21, 60],
-      popupAnchor: [0, -60]
-    });
 
   const DynamicEvents = () => {
     useMapEvents({
       zoomend: () => {
         const zoom = mapRef.current.getZoom();
         setZoomLevel(zoom);
-        if (markerRef.current) {
-          markerRef.current.setIcon(customIcon(zoom));
-        }
-      }
+      },
     });
     return null;
   };
 
+  const customIcon = (zoom) =>
+    L.icon({
+      iconUrl: customPin,
+      iconSize: zoom >= 8 ? [28, 42] : zoom >= 6 ? [34, 51] : [42, 60],
+      iconAnchor: [21, 60],
+      popupAnchor: [0, -60],
+    });
+
   const handlePinClick = () => {
-    setShowForecast(false);
-    // We'll trigger disruption logic and zoom later
+    if (mapRef.current) {
+      mapRef.current.setView(center, 8, { animate: true });
+    }
   };
 
   return (
-    <MapContainer
-      center={center}
-      zoom={zoomLevel}
-      minZoom={5}
-      style={{ height: "500px", width: "100%" }}
-      whenCreated={(mapInstance) => (mapRef.current = mapInstance)}
-      zoomControl={false}
-    >
-      <TileLayer
-        url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-        attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
-      />
-
-      <DynamicEvents />
-
-      {/* PULSE SVG FIXED TO LOCATION */}
-      <div
-        className="leaflet-marker-pane"
-        style={{
-          position: "absolute",
-          transform: `translate(-50%, -50%)`
-        }}
+    <div className="relative w-full h-[560px] rounded-xl overflow-hidden bg-gradient-to-br from-[#1a1d26] to-[#10131c] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_15px_rgba(0,0,0,0.3)]">
+      <MapContainer
+        center={center}
+        zoom={6}
+        zoomControl={false}
+        attributionControl={false}
+        style={{ height: "100%", width: "100%" }}
+        whenCreated={(map) => (mapRef.current = map)}
       >
-        <img
-          src={pulseGlow}
-          alt="pulse"
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: zoomLevel >= 8 ? 80 : zoomLevel >= 6 ? 100 : 120,
-            transform: "translate(-50%, -50%)",
-            pointerEvents: "none",
-            zIndex: 200
-          }}
-        />
-      </div>
+        <DynamicEvents />
 
-      {/* MARKER PIN */}
-      <Marker
-        position={center}
-        icon={customIcon(zoomLevel)}
-        eventHandlers={{ click: handlePinClick }}
-        ref={markerRef}
-      />
-    </MapContainer>
+        {/* GOOD PHOTO Blue-Slate Map */}
+        <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+
+        {/* Pulse Glow (Orange, Locked) */}
+        <Marker
+          position={center}
+          icon={L.divIcon({
+            className: "",
+            html: `<img src="${pulseGlow}" style="width:200px;height:200px;" />`,
+            iconSize: [200, 200],
+            iconAnchor: [100, 100],
+          })}
+        />
+
+        {/* Forecast Label as divIcon (Zoom-Locked) */}
+        <Marker
+          position={center}
+          icon={L.divIcon({
+            className: "",
+            html: `<div class='text-white font-bold text-[16px] sm:text-[18px] md:text-[20px] tracking-wide'>Blizzard Forecast – 3 Days</div>`,
+            iconSize: [200, 40],
+            iconAnchor: [100, 50],
+          })}
+        />
+
+        {/* Custom Clickable Pin */}
+        <Marker
+          position={center}
+          icon={customIcon(zoomLevel)}
+          eventHandlers={{ click: handlePinClick }}
+        >
+          <Popup>
+            <div className="text-sm text-white">
+              <strong>AI Forecast Analysis</strong>
+              <p>• $12M spoilage risk identified</p>
+              <p>• Patterns match 2021 cold snap</p>
+              <p>• Response action needed in &lt; 6h</p>
+            </div>
+          </Popup>
+        </Marker>
+      </MapContainer>
+    </div>
   );
 };
 
