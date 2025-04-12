@@ -1,22 +1,29 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}"
+    "./src/**/*.{js,jsx,ts,tsx}", // ✅ Ensures all React files are scanned
   ],
   theme: {
     extend: {
+      zIndex: {
+        '0': '0',
+        '10': '10',
+        '20': '20',
+        '30': '30',
+        '40': '40',
+        '50': '50',
+      },
       animation: {
-        pulseGlow: "pulseGlow 2s ease-in-out infinite"
+        pulse: "pulse 2s ease-in-out infinite",
       },
       keyframes: {
-        pulseGlow: {
-          "0%": { opacity: "0.7", transform: "scale(1)" },
-          "50%": { opacity: "0.3", transform: "scale(1.15)" },
-          "100%": { opacity: "0.7", transform: "scale(1)" }
-        }
-      }
-    }
+        pulse: {
+          '0%': { transform: 'scale(1)', opacity: '1' },
+          '50%': { transform: 'scale(1.4)', opacity: '0.4' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 }
