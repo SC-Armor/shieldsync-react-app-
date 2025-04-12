@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -73,18 +73,27 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Forecast Label (properly placed and above pin) */}
+        {/* Forecast Label (locked, scaled, wrapped) */}
         <Marker
           position={center}
           icon={L.divIcon({
             className: "",
             html: `
-              <div style="transform: translateY(-80px); z-index: 1000;" 
-              class="text-white font-bold text-[16px] sm:text-[18px] md:text-[20px] tracking-wide text-center">
+              <div 
+                style="
+                  transform: translateY(-85px) scale(${zoomLevel / 10});
+                  max-width: 200px;
+                  word-break: break-word;
+                  white-space: normal;
+                  text-align: center;
+                  z-index: 1000;
+                " 
+                class="text-white font-bold leading-tight tracking-wide text-[16px] md:text-[18px] lg:text-[20px]"
+              >
                 Blizzard Forecast – 3 Days
               </div>`,
-            iconSize: [200, 40],
-            iconAnchor: [100, 0],
+            iconSize: [0, 0],
+            iconAnchor: [0, 0],
           })}
         />
 
