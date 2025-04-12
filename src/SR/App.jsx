@@ -1,8 +1,3 @@
-
-Source
-Output
-src/SR/App.jsx
-
 import React from "react";
 import DisruptionMap from "./DisruptionMap";
 
