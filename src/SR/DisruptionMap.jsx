@@ -38,7 +38,6 @@ const DisruptionMap = () => {
       popupAnchor: [0, -60],
     });
 
-  // 🔒 EXACT copy from your original code
   const handlePinClick = () => {
     if (mapRef.current) {
       mapRef.current.setView(center, 8, { animate: true });
@@ -57,50 +56,39 @@ const DisruptionMap = () => {
       >
         <DynamicEvents />
 
-        {/* 🔒 Tile layer: your original black slate */}
+        {/* Blue-toned map tile closest to GOOD PHOTO */}
         <TileLayer
           url="https://{s}.tile.jawg.io/jawg-dark/{z}/{x}/{y}.png?access-token=YOUR_ACCESS_TOKEN"
           attribution="&copy; <a href='https://www.jawg.io' target='_blank'>Jawg Maps</a>"
         />
 
-        {/* 🔒 Pulse Glow: untouched */}
+        {/* Pulse Glow (locked and scaling) */}
         <Marker
           position={center}
           icon={L.divIcon({
             className: "",
-            html: `<img src="${pulseGlow}" style="width:200px;height:200px;" />`,
+            html: <img src="${pulseGlow}" style="width:200px;height:200px;" />,
             iconSize: [200, 200],
             iconAnchor: [100, 100],
           })}
         />
 
-        {/* ✅ Forecast Label: photo-matched placement */}
+        {/* Forecast Label (properly placed and above pin) */}
         <Marker
           position={center}
           icon={L.divIcon({
             className: "",
-            html: `
-              <div 
-                style="
-                  position: absolute;
-                  left: 50%;
-                  transform: translate(-50%, -130px) scale(${zoomLevel / 10});
-                  max-width: 180px;
-                  word-break: break-word;
-                  white-space: normal;
-                  text-align: center;
-                  z-index: 1000;
-                "
-                class="text-white font-bold leading-tight tracking-wide text-[15px] md:text-[17px] lg:text-[19px]"
-              >
+            html: 
+              <div style="transform: translateY(-80px); z-index: 1000;" 
+              class="text-white font-bold text-[16px] sm:text-[18px] md:text-[20px] tracking-wide text-center">
                 Blizzard Forecast – 3 Days
-              </div>`,
-            iconSize: [0, 0],
-            iconAnchor: [0, 0],
+              </div>,
+            iconSize: [200, 40],
+            iconAnchor: [100, 0],
           })}
         />
 
-        {/* 🔒 Pin with dynamic scaling and click handler */}
+        {/* Pin with dynamic scaling + zoom */}
         <Marker
           position={center}
           icon={customIcon(zoomLevel)}
