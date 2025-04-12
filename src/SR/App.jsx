@@ -1,3 +1,8 @@
+
+Source
+Output
+src/SR/App.jsx
+
 import React from "react";
 import DisruptionMap from "./DisruptionMap";
 
@@ -49,19 +54,3 @@ export default function App() {
                 <p>Financial Cost: Est. $12M</p>
                 <p className="text-red-500 font-semibold">Public Risk Level: RED</p>
               </div>
-              <div>
-                <p className="text-gray-400 font-bold mb-1">With Shield Response</p>
-                <p>Rerouted in &lt; 6 hours</p>
-                <p>$170K reroute cost</p>
-                <p className="text-green-500 font-semibold">Public Risk Level: CONTAINED</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mt-8 text-xs text-center text-gray-500">
-        © 2025 AMERICAN SHIELD COMMAND. ShieldSync™ and American Shield™ are proprietary technologies. Protected under U.S. copyright law.
-      </div>
-    </div>
-  );
-}
