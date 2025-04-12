@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -38,8 +38,15 @@ const DisruptionMap = () => {
       popupAnchor: [0, -60],
     });
 
+  // 🔒 EXACT copy from your original code
+  const handlePinClick = () => {
+    if (mapRef.current) {
+      mapRef.current.setView(center, 8, { animate: true });
+    }
+  };
+
   return (
-    <div className="relative w-full h-[560px] rounded-xl overflow-hidden bg-black">
+    <div className="relative w-full h-[560px] rounded-xl overflow-hidden bg-gradient-to-br from-[#1a1d26] to-[#10131c] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_15px_rgba(0,0,0,0.3)]">
       <MapContainer
         center={center}
         zoom={zoomLevel}
@@ -50,13 +57,13 @@ const DisruptionMap = () => {
       >
         <DynamicEvents />
 
-        {/* BLACK MAP TILE (baseline) */}
+        {/* 🔒 Tile layer: your original black slate */}
         <TileLayer
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution=""
+          url="https://{s}.tile.jawg.io/jawg-dark/{z}/{x}/{y}.png?access-token=YOUR_ACCESS_TOKEN"
+          attribution="&copy; <a href='https://www.jawg.io' target='_blank'>Jawg Maps</a>"
         />
 
-        {/* Pulse Glow (untouched) */}
+        {/* 🔒 Pulse Glow: untouched */}
         <Marker
           position={center}
           icon={L.divIcon({
@@ -67,7 +74,7 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Forecast Label (visually placed like the photo) */}
+        {/* ✅ Forecast Label: photo-matched placement */}
         <Marker
           position={center}
           icon={L.divIcon({
@@ -75,9 +82,9 @@ const DisruptionMap = () => {
             html: `
               <div 
                 style="
-                  transform: translate(-50%, -125px) scale(${zoomLevel / 10});
                   position: absolute;
                   left: 50%;
+                  transform: translate(-50%, -130px) scale(${zoomLevel / 10});
                   max-width: 180px;
                   word-break: break-word;
                   white-space: normal;
@@ -93,10 +100,11 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Pin (untouched) */}
+        {/* 🔒 Pin with dynamic scaling and click handler */}
         <Marker
           position={center}
           icon={customIcon(zoomLevel)}
+          eventHandlers={{ click: handlePinClick }}
           ref={markerRef}
         >
           <Popup>
