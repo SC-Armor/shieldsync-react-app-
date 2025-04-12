@@ -67,22 +67,32 @@ const DisruptionMap = () => {
           position={center}
           icon={L.divIcon({
             className: "",
-            html: <img src="${pulseGlow}" style="width:200px;height:200px;" />,
+            html: `<img src="${pulseGlow}" style="width:200px;height:200px;" />`,
             iconSize: [200, 200],
             iconAnchor: [100, 100],
           })}
         />
 
-        {/* Forecast Label (properly placed and above pin) */}
+        {/* Forecast Label (visually same, now locked to map) */}
         <Marker
           position={center}
           icon={L.divIcon({
             className: "",
-            html: 
-              <div style="transform: translateY(-80px); z-index: 1000;" 
-              class="text-white font-bold text-[16px] sm:text-[18px] md:text-[20px] tracking-wide text-center">
+            html: `
+              <div 
+                style="
+                  transform: translateY(-80px) scale(${zoomLevel / 10});
+                  /* position: absolute; <-- 🔥 REMOVED THIS LINE TO FIX THE LOCK */
+                  max-width: 200px;
+                  word-break: break-word;
+                  white-space: normal;
+                  text-align: center;
+                  z-index: 1000;
+                "
+                class="text-white font-bold text-[16px] sm:text-[18px] md:text-[20px] tracking-wide text-center"
+              >
                 Blizzard Forecast – 3 Days
-              </div>,
+              </div>`,
             iconSize: [200, 40],
             iconAnchor: [100, 0],
           })}
