@@ -38,14 +38,8 @@ const DisruptionMap = () => {
       popupAnchor: [0, -60],
     });
 
-  const handlePinClick = () => {
-    if (mapRef.current) {
-      mapRef.current.setView(center, 8, { animate: true });
-    }
-  };
-
   return (
-    <div className="relative w-full h-[560px] rounded-xl overflow-hidden bg-gradient-to-br from-[#1a1d26] to-[#10131c] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_15px_rgba(0,0,0,0.3)]">
+    <div className="relative w-full h-[560px] rounded-xl overflow-hidden bg-black">
       <MapContainer
         center={center}
         zoom={zoomLevel}
@@ -56,13 +50,13 @@ const DisruptionMap = () => {
       >
         <DynamicEvents />
 
-        {/* Blue-toned map tile closest to GOOD PHOTO */}
+        {/* BLACK MAP TILE (baseline) */}
         <TileLayer
-          url="https://{s}.tile.jawg.io/jawg-dark/{z}/{x}/{y}.png?access-token=YOUR_ACCESS_TOKEN"
-          attribution="&copy; <a href='https://www.jawg.io' target='_blank'>Jawg Maps</a>"
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution=""
         />
 
-        {/* Pulse Glow (locked and scaling) */}
+        {/* Pulse Glow (untouched) */}
         <Marker
           position={center}
           icon={L.divIcon({
@@ -73,7 +67,7 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Forecast Label (locked, scaled, wrapped) */}
+        {/* Forecast Label (visually placed like the photo) */}
         <Marker
           position={center}
           icon={L.divIcon({
@@ -81,14 +75,16 @@ const DisruptionMap = () => {
             html: `
               <div 
                 style="
-                  transform: translateY(-85px) scale(${zoomLevel / 10});
-                  max-width: 200px;
+                  transform: translate(-50%, -125px) scale(${zoomLevel / 10});
+                  position: absolute;
+                  left: 50%;
+                  max-width: 180px;
                   word-break: break-word;
                   white-space: normal;
                   text-align: center;
                   z-index: 1000;
-                " 
-                class="text-white font-bold leading-tight tracking-wide text-[16px] md:text-[18px] lg:text-[20px]"
+                "
+                class="text-white font-bold leading-tight tracking-wide text-[15px] md:text-[17px] lg:text-[19px]"
               >
                 Blizzard Forecast – 3 Days
               </div>`,
@@ -97,11 +93,10 @@ const DisruptionMap = () => {
           })}
         />
 
-        {/* Pin with dynamic scaling + zoom */}
+        {/* Pin (untouched) */}
         <Marker
           position={center}
           icon={customIcon(zoomLevel)}
-          eventHandlers={{ click: handlePinClick }}
           ref={markerRef}
         >
           <Popup>
