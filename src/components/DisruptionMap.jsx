@@ -7,6 +7,8 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+// ✅ Updated asset paths
 import customPin from "../assets/pin-icon.svg";
 import pulseGlow from "../assets/orange-pulse-glow.svg";
 
@@ -49,3 +51,41 @@ const DisruptionMap = () => {
         zoom={6}
         zoomControl={false}
         attributionControl={false}
+        style={{ height: "100%", width: "100%" }}
+        whenCreated={(map) => (mapRef.current = map)}
+      >
+        <DynamicEvents />
+
+        {/* Blue-Slate Map Theme */}
+        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+
+        {/* Glowing Pulse (Anchored) */}
+        <Marker
+          position={center}
+          icon={L.divIcon({
+            className: "",
+            html: `<img src="${pulseGlow}" style="width:200px;height:200px;" />`,
+            iconSize: [200, 200],
+            iconAnchor: [100, 100]
+          })}
+        />
+
+        {/* Custom Pin (No Hover/Popup) */}
+        <Marker
+          position={center}
+          icon={customIcon(zoomLevel)}
+          eventHandlers={{ click: handlePinClick }}
+        />
+      </MapContainer>
+
+      {/* Blizzard Forecast Text (Fixed, White, Zoom-Responsive) */}
+      <div
+        className={`absolute ${textOffset} left-[50%] transform -translate-x-1/2 text-white font-bold tracking-wide z-[400] pointer-events-none ${textSize}`}
+      >
+        Blizzard Forecast – 3 Days
+      </div>
+    </div>
+  );
+};
+
+export default DisruptionMap;
