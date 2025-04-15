@@ -34,7 +34,7 @@ export default function App() {
                   points="100,90 102,87 165,80 102,93"
                   fill="url(#needleGradient)"
                 />
-                <circle cx="100" cy="90" r="5" fill="white" />
+  <circle cx="100" cy="90" r="5" fill="white" />
               </svg>
               <div className="absolute text-white font-bold text-sm -bottom-1 left-6">LOW</div>
               <div className="absolute text-white font-bold text-sm -bottom-1 right-6">HIGH</div>
@@ -49,3 +49,19 @@ export default function App() {
                 <p>Financial Cost: Est. $12M</p>
                 <p className="text-red-500 font-semibold">Public Risk Level: RED</p>
               </div>
+              <div>
+                <p className="text-gray-400 font-bold mb-1">With Shield Response</p>
+                <p>Rerouted in &lt; 6 hours</p>
+                <p>$170K reroute cost</p>
+                <p className="text-green-500 font-semibold">Public Risk Level: CONTAINED</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-8 text-xs text-center text-gray-500">
+        © 2025 AMERICAN SHIELD COMMAND. ShieldSync™ and American Shield™ are proprietary technologies. Protected under U.S. copyright law.
+      </div>
+    </div>
+  );
+}
