@@ -8,9 +8,9 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// ✅ Updated asset paths
-import customPin from "../assets/pin-icon.svg";
-import pulseGlow from "../assets/orange-pulse-glow.svg";
+// ✅ Corrected asset paths based on your current structure
+import customPin from "../../pin-icon.svg";
+import pulseGlow from "../../orange-pulse-glow.svg";
 
 const DisruptionMap = () => {
   const center = [38.2527, -85.7585];
