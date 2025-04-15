@@ -1,5 +1,5 @@
 import React from "react";
-import DisruptionMap from "../assets/components/DisruptionMap";
+import DisruptionMap from "../assets/components/DisruptionMap.jsx"; // ✅ Fixed path and .jsx extension
 
 export default function App() {
   return (
