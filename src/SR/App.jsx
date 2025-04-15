@@ -1,5 +1,5 @@
 import React from "react";
-import DisruptionMap from "./DisruptionMap";
+import DisruptionMap from "../assets/components/DisruptionMap";
 
 export default function App() {
   return (
@@ -34,7 +34,7 @@ export default function App() {
                   points="100,90 102,87 165,80 102,93"
                   fill="url(#needleGradient)"
                 />
-  <circle cx="100" cy="90" r="5" fill="white" />
+                <circle cx="100" cy="90" r="5" fill="white" />
               </svg>
               <div className="absolute text-white font-bold text-sm -bottom-1 left-6">LOW</div>
               <div className="absolute text-white font-bold text-sm -bottom-1 right-6">HIGH</div>
