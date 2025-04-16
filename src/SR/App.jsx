@@ -1,5 +1,7 @@
+// src/SR/App.jsx
+
 import React from "react";
-import DisruptionMap from "../components/DisruptionMap.jsx"; // ✅ Fixed path and .jsx extension
+import DisruptionMap from "../components/DisruptionMap";
 
 export default function App() {
   return (
@@ -30,10 +32,7 @@ export default function App() {
                 </defs>
                 <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="#2c2f3a" strokeWidth="12" />
                 <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="url(#gaugeGradient)" strokeWidth="10" />
-                <polygon
-                  points="100,90 102,87 165,80 102,93"
-                  fill="url(#needleGradient)"
-                />
+                <polygon points="100,90 102,87 165,80 102,93" fill="url(#needleGradient)" />
                 <circle cx="100" cy="90" r="5" fill="white" />
               </svg>
               <div className="absolute text-white font-bold text-sm -bottom-1 left-6">LOW</div>
